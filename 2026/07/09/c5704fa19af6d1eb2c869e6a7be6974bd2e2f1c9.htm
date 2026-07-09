@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+    
+
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+  <title>imgbox - fast, simple image host</title>
+
+  <meta name="description" content="Use imgbox to upload, host and share all your images. It's simple, free and blazing fast!" />
+  <meta name="keywords" content="image host, image upload, image hosting, share images, free image host" />
+
+
+  <meta name="ROBOTS" content="NOINDEX, NOFOLLOW"/>
+  <meta name="GOOGLEBOT" content="NOINDEX, NOFOLLOW"/>
+  <meta name="GOOGLEBOT" content="NOARCHIVE"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="exoclick-site-verification" content="0dda467de622e046550d767037b0d1fd"/>
+
+
+
+<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+
+<meta content="authenticity_token" name="csrf-param" />
+<meta content="B3MyNcxr5uq+yv2D3VHN/T8TKH2qX8qcBQ43KRr98GY=" name="csrf-token" />
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<link href="/assets/application-744f601be16423305a51d59f73651c78.css" media="screen" rel="stylesheet" />
+
+
+
+
+
+<style type="text/css">
+
+	.image-container{
+		text-align:center;
+	}
+
+
+	.full-size{
+		width:100%;
+		overflow:auto;
+	}
+
+	.full-size .image-content{
+		max-width:none;
+
+	}
+
+	@media (max-width: 767px) {
+	  body {
+	    padding-left: 0px;
+	    padding-right: 0px;
+		padding-bottom:0px;
+		margin:0px;
+		overflow-x:hidden;
+	  }
+
+	  .navbar{
+		  padding-left: 20px;
+		  padding-right: 20px;
+		  margin-bottom:0px;
+	  }
+
+  	}
+
+	@media (min-width:768px){
+		#img{
+			-moz-box-shadow: 0px 0px 20px #111111;
+			-webkit-box-shadow: 0px 0px 20px #111111;
+			box-shadow: 0px 0px 20px #111111;
+		}
+
+
+	}
+
+
+	@media (min-width: 980px) {
+		#image-content-container{
+			padding-top:70px;
+
+		}
+	}
+
+	.banner-ad-bottom{
+		margin:auto;
+		margin-top:10px;
+		margin-bottom:10px;
+		width:610px;
+		height:265px;
+		overflow:hidden;
+		padding:0px;
+	}
+
+	@media (max-width:768px){
+		.banner-ad-bottom{
+			width:100%;
+		}
+	}
+
+	.addthis_toolbox a.rnd span{
+		border-radius:4px 4px 4px 4px;
+		-moz-border-radius: 4px 4px 4px 4px;
+		-webkit-border-radius: 4px 4px 4px 4px;
+	}
+
+	#redirect-ad{
+		position:absolute;
+		z-index:1050;
+		top:0px;
+		left:0px;
+		width:100%;
+		height:100%;
+		background-color:#262626;
+		background-image:url("/images/background-body.png");
+		border:1px solid red;
+
+	}
+
+	#redirect-ad a{
+		font-size:20px;
+	}
+
+	.overlay-close-x{
+		color:orange;
+		float:right;
+		font-size:24px;
+		margin-top:4px;
+		cursor: pointer;
+	}
+
+	#viroll{
+			text-align:center;
+			width:600px;
+			margin:auto;
+			margin-bottom:20px;
+			margin-top:10px;
+		}
+
+	#viroll a{
+		display:inline-block;
+		position:relative;
+		width:100px;
+		height:100px;
+		overflow:hidden;
+		margin:6px;
+		margin-bottom:3px;
+		border:1px solid #1b1b1b;
+		border-radius:4px;
+		-moz-border-radius: 4px 4px 4px 4px;
+		-webkit-border-radius: 4px 4px 4px 4px;
+	}
+
+	#viroll a:hover{
+		border:1px solid orange;
+	}
+
+	#viroll a img{
+		width:100px;
+		height:100px;
+		border-radius:4px;
+		-moz-border-radius: 4px 4px 4px 4px;
+		-webkit-border-radius: 4px 4px 4px 4px;
+	}
+
+	#viroll span{
+	text-align:left;
+		position: absolute;
+		display: block;
+		top: 0px;
+		color: white;
+		font-size: 18px;
+		font-weight: bold;
+		padding: 5px 15px;
+		text-shadow: 0px 0px 6px #000;
+	}
+
+	.full-page-redirect{
+		position:fixed;
+		z-index:9999;
+		top:0px;
+		left:0px;
+		width:100%;
+		height:100%;
+		background-color:#262626;
+    background-color:rgba(38,38,38,0.8);
+	}
+
+	#full-page-redirect-close-container{
+		height:60px;
+		text-align:center;
+	}
+
+	#full-page-redirect-close-container a{
+		font-size: 32px;
+		font-weight: bold;
+		line-height:60px;
+		text-decoration:underline;
+	}
+
+	#redirect-ad-iframe{
+		display:block;
+		width:100%;
+		max-width:1200px;
+		height:800px;
+		margin:auto;
+		border:1px solid black;
+	}
+
+	textarea.disabled{
+		background-color:black;
+	}
+
+  .btn-sm-uppercase{
+    font-size:10px;
+    text-transform: uppercase;
+    padding-left:8px;
+    padding-right:8px;
+  }
+
+  .modal-dialog{
+		margin:0px auto;
+	}
+
+
+	.modal-sm, .sponsor-modal {
+    	width: 330px;
+	}
+
+  .sponsor-modal .modal-header{
+    border-bottom: 1px solid #373737;
+  }
+
+  .sponsor-modal {
+    margin-left:-165px;
+  }
+
+
+
+
+	.modal-header {
+    	min-height: 16.43px;
+    	padding: 8px 15px;
+    }
+
+	.modal-title{
+		font-size:14px;
+		color:grey;
+    margin:3px 0px;
+	}
+
+  @media (max-width: 979px){
+    .navbar-fixed-top {
+        margin-bottom: 4px;
+    }
+}
+
+  @media (min-width: 980px){
+    #image-content-container {
+        padding-top: 57px;
+    }
+  }
+</style>
+      <meta property="og:image" content="https://images2.imgbox.com/c8/46/GTNUeGy8_o.gif"/>
+      <meta name="twitter:card" content="photo"/>
+      <meta name="twitter:image" content="https://images2.imgbox.com/c8/46/GTNUeGy8_o.gif"/>
+      <meta name="twitter:url" content="https://imgbox.com/GTNUeGy8"/>
+
+
+</head>
+<body>
+
+  <script src="https://adsmediabox.com/ads.js?z=233&ad_height=300&adstrade=654871" type="text/javascript"></script>
+  <div class="full-page-redirect" id="full-page-redirect" style="display: none">
+		<div id="full-page-redirect-close-container">
+			<a href="#" onclick="javascript:void(0);" data-close-post="Continue to your image">Please wait, your image is loading...</a>
+		</div>
+	  	  <iframe src="" id="redirect-ad-iframe" style="background-color:#1e1e1e;" ></iframe> <!-- sandbox="allow-same-origin allow-scripts allow-forms" -->
+		<div id="full-page-redirect-close-container">
+			<a href="#" onclick="javascript:void(0);" data-close-post="Continue to your image">Please wait, your image is loading...</a>
+		</div>
+  </div>
+
+
+
+	<div id="wrap">
+		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		      <div class="navbar-inner">
+		        <div class="container">
+
+
+						<div class="row-fluid hidden-phone">
+							<div class="span6">
+								<a class="brand" href="/"><img src="/images/imgbox.png" alt="imgbox"/></a>
+
+                <div style="font-size:16px; padding-left:20px; line-height:50px; height:53px; border-left:1px solid #202020; display:block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+								  <a href="/g/e803hXXrqV">Unnamed Gallery</a> &nbsp; 2 of 5
+                </div>
+
+							</div>
+
+							<div class="span6 text-right">
+
+
+                <div class="btn-group ">
+                  <a href="/?tl=1" class="btn btn-inverse hidden-tablet" style="padding-left:7px; padding-right:7px;"><i class="icon-cloud-upload"></i></a>
+                  <a href="https://sendvid.com/?tl=ixh" class="btn btn-inverse btn-sm-uppercase hidden-tablet">Video</a>
+                  <a href="/?tl=1" class="btn btn-inverse btn-sm-uppercase hidden-tablet">Image</a>
+                      <a href="https://go.clickwhore.com/redirect.go?pid=54681&spaceid=11889601" class="btn btn-inverse btn-sm-uppercase" target="_blank">Live Sex</a>
+                      <a href="https://sinparty.com/live/sin-dynamic?linkId=lp_490600&sourceId=yoyo&tenantId=sinaffiliates&affS1=imgbox&affS2=menutab" class="btn btn-inverse btn-sm-uppercase" target="_blank">Teens</a>
+                </div>
+								<a href="https://images2.imgbox.com/c8/46/GTNUeGy8_o.gif?download=true" class="btn btn-inverse"><i class="icon-cloud-download"></i></a>
+								<a href="javascript:rs();" class="btn btn-inverse"><i class="icon-search"></i></a>
+
+										<a href="/WHEhcvnl" class="btn btn-inverse"><i class="icon-arrow-left"></i></a>
+
+										<a href="/GDQAxjK7" class="btn btn-inverse"><i class="icon-arrow-right"></i></a>
+							</div>
+						</div><!--/row-fluid-->
+
+
+						<div class="row-fluid visible-phone">
+							<div class="span12 text-right" style="padding-left:5px; padding-right:10px">
+								<a class="brand pull-left" href="/"><img src="/images/imgbox.png" alt="imgbox"/></a>
+                  <div class="btn-group ">
+                      <a href="https://go.clickwhore.com/redirect.go?pid=54681&spaceid=11889601" class="btn btn-inverse btn-sm-uppercase" target="_blank">Live Sex</a>
+                      <a href="https://sinparty.com/live/sin-dynamic?linkId=lp_490600&sourceId=yoyo&tenantId=sinaffiliates&affS1=imgbox&affS2=menutab" class="btn btn-inverse btn-sm-uppercase" target="_blank">Teens</a>
+                   </div>
+								<span style="line-height:26px; vertical-align:bottom; font-size:16px; display:inline-block; margin-right:15px;"><a href="/g/e803hXXrqV">2 of 5</a></span>
+
+										<a href="/WHEhcvnl" class="btn btn-inverse"><i class="icon-arrow-left"></i></a>
+
+										<a href="/GDQAxjK7" class="btn btn-inverse"><i class="icon-arrow-right"></i></a>
+							</div><!--/span12-->
+						</div>
+
+
+
+
+		        </div><!--/container-->
+		      </div><!--/navbar-inner-->
+		 </div><!--/.navbar-->
+
+
+
+
+		 <div class="container window-size" id="image-content-container" style="position:relative;">
+
+
+
+			 
+
+
+
+
+<div style="text-align:center; margin-top:0px;">
+  <div  id="aad-header-1"  style="display: inline-block;width:300px;height:250px">
+    <!--    <div data-cl-spot="2086911"></div>-->
+  </div>
+  <script>
+      (function(el){
+          var url = "https://content.spmediacdn.com/site/banner.html?so=straight&linkId=lp_367902&sourceId=yoyo&tenantId=sinaffiliates&affS1=d_header&affS2=imgbox&affS3=banner&limit=4&rows=2&page=1";
+          document.getElementById(el).innerHTML = ('<iframe src="'+url+'" style="display:block !important" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" width="300" height="250" allowtransparency="true"></iframe>');
+      })('aad-header-1');
+  </script>
+  <div id="aad-header-2" style="display: inline-block;width:300px;height:250px">
+    <!--    <div data-cl-spot="2086915"></div>-->
+  </div>
+  <script>
+      (function(el){
+          var url = "https://content.spmediacdn.com/site/banner.html?so=straight&linkId=lp_367902&sourceId=yoyo&tenantId=sinaffiliates&affS1=d_header&affS2=imgbox&affS3=banner&limit=4&rows=2&page=2";
+          document.getElementById(el).innerHTML = ('<iframe src="'+url+'" style="display:block !important" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" width="300" height="250" allowtransparency="true"></iframe>');
+      })('aad-header-2');
+  </script>
+  <div id="aad-header-3" style="display: inline-block;width:300px;height:250px">
+    <!--    <div data-cl-spot="2086917"></div>-->
+  </div>
+  <script>
+      (function(el){
+          var url = "https://content.spmediacdn.com/site/banner.html?so=straight&linkId=lp_367902&sourceId=yoyo&tenantId=sinaffiliates&affS1=d_header&affS2=imgbox&affS3=banner&limit=4&rows=2&page=3";
+          document.getElementById(el).innerHTML = ('<iframe src="'+url+'" style="display:block !important" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" width="300" height="250" allowtransparency="true"></iframe>');
+      })('aad-header-3');
+  </script>
+</div>
+
+
+
+
+
+<div class="image-container">
+  <a href="https://imgbox.com/GTNUeGy8" title="054354kmii7jymzmj0bj0i.gif" onclick="return false"><img alt="Gtnuegy8 o" class="image-content" id="img" onclick="rs()" src="https://images2.imgbox.com/c8/46/GTNUeGy8_o.gif" title="054354kmii7jymzmj0bj0i.gif" /></a>
+</div>
+
+
+
+
+<div style="text-align:center; margin-top:4px;">
+  <div  id="aad-footer-1"  style="display: inline-block;width:300px;height:250px">
+<!--    <div data-cl-spot="2086911"></div>-->
+  </div>
+  <script>
+      (function(el){
+          var url = "https://content.spmediacdn.com/site/banner.html?so=straight&linkId=lp_367902&sourceId=yoyo&tenantId=sinaffiliates&affS1=d_footer&affS2=imgbox&affS3=banner&limit=4&rows=2&page=4";
+          document.getElementById(el).innerHTML = ('<iframe src="'+url+'" style="display:block !important" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" width="300" height="250" allowtransparency="true"></iframe>');
+      })('aad-footer-1');
+  </script>
+  <div id="aad-footer-2" style="display: inline-block;width:300px;height:250px">
+<!--    <div data-cl-spot="2086915"></div>-->
+  </div>
+  <script>
+      (function(el){
+          var url = "https://content.spmediacdn.com/site/banner.html?so=straight&linkId=lp_367902&sourceId=yoyo&tenantId=sinaffiliates&affS1=d_footer&affS2=imgbox&affS3=banner&limit=4&rows=2&page=5";
+          document.getElementById(el).innerHTML = ('<iframe src="'+url+'" style="display:block !important" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" width="300" height="250" allowtransparency="true"></iframe>');
+      })('aad-footer-2');
+  </script>
+  <div id="aad-footer-3" style="display: inline-block;width:300px;height:250px">
+<!--    <div data-cl-spot="2086917"></div>-->
+  </div>
+  <script>
+      (function(el){
+          var url = "https://content.spmediacdn.com/site/banner.html?so=straight&linkId=lp_367902&sourceId=yoyo&tenantId=sinaffiliates&affS1=d_footer&affS2=imgbox&affS3=banner&limit=4&rows=2&page=6";
+          document.getElementById(el).innerHTML = ('<iframe src="'+url+'" style="display:block !important" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" width="300" height="250" allowtransparency="true"></iframe>');
+      })('aad-footer-3');
+  </script>
+</div>
+
+<script data-cfasync="false">!function(){"use strict";for(var t="cmeccZYhfZb^W^[_`PURNLXWMYIQXJKEDNK>EI?M!K;B@@B3553A0>4:=))%$7*4&-.4\"d/~&*{&!tuvT~{nuy~}t|xqeonjnrr^j^_s^^fddhbeQVhSSNYMMKRHPREJDBJ?=D><D@@F>825=/00,00,>/&:.1(! 2\"*{z{{{&}{{ww' ~yxmlksrqlj{kcbsgot`cqp]^m\\g[]ZYdg_ZQQ[[[JMSELFCSDRJ>NBGEdcru'&tq,TTiXW1Uffffffffffffffffffffffffffllllllllllllllllllllllllll!!!!!!!!!!$kNH ~h;@@jWkgrfd4`]Yq_4?<\\Y+?/<<&%(0$$%&111.$( $&xu e& \"otqs~}xz@@43@@*]d*'%n$9%mk\\\",YS]cTRN`LvDE('37)a".replace(/((\x40){2})/g,"$2").split("").map(((t,n)=>{const r=t.charCodeAt(0)-32;return r>=0&&r<95?String.fromCharCode(32+(r+n)%95):t})).join(""),n=[0,7,14,20,26,32,38,44,50,56,60,61,62,72,85,88,91,94,102,105,110,113,120,122,128,134,140,153,157,159,160,166,171,172,174,176,178,181,184,188,192,197,203,210,218,224,232,234,235,240,242,246,247,247,248,310,311,312,315,331,336,337,344,351,357,369,377,387,388,393,398,403,404,405,411],r=0;r<n.length-1;r++)n[r]=t.substring(n[r],n[r+1]);var s=[n[0],n[1],n[2],n[3],n[4],n[5],n[6],n[7],n[8]];s.push(s[0]+n[9]);var o=window,e=o.Math,c=o.Error,i=o.RegExp,l=o.document,u=o.Uint8Array,f=o.Date.now,h=e.floor,a=e.random,d=o.JSON.stringify,v=o.String.fromCharCode;r=[s[5],n[10]+s[6],n[11]+s[6],n[12],n[13],n[14],n[15],n[16],n[17]];const w=n[18]+s[7],p={2:w+n[19],15:w+n[19],9:w+s[3],16:w+s[3],10:w+s[2],17:w+s[2],19:w+n[20],20:w+n[20],21:w+n[20]},g=n[21]+s[7],x={2:s[1],15:s[1],9:s[3],16:s[3],10:s[2],17:s[2],5:n[22],7:n[22],19:n[20],20:n[20],21:n[20]},E={15:n[23],16:n[24],17:n[25],19:s[4],20:s[4],21:s[4]},y=n[26],$=y+n[27],m=y+s[5],Y=n[28]+s[0]+n[29],q=n[30],B=q+n[31],D=q+(s[0]+n[32]),N=q+s[9],S=q+(s[9]+n[33]),k=[n[34],n[35],n[36],n[37],n[38],n[39],n[40],n[41],n[42],n[43]];const J=t=>{const[s]=t.split(n[46]);let[o,e,l]=((t,n)=>{let[r,s,...o]=t.split(n);return s=[s,...o].join(n),[r,s,!!o.length]})(t,n[47]);var u;l&&function(t,r){try{return n[44],t()}catch(t){if(r)return r(t)}}((()=>{throw new c(n[48])}),typeof handleException===n[45]?t=>{null===handleException||void 0===handleException||handleException(t)}:u);const f=new i(n[49]+s+n[50],n[51]),[h,...a]=o.replace(f,n[52]).split(n[53]);return{protocol:s,origin:o,[r[0]]:h,path:a.join(n[53]),search:e}},M=36e5,R=n[54],j=[[97,122],[65,90],[48,57]],K=(t,n)=>h(a()*(n-t+1))+t;function Q(t){let r=n[52];for(let n=0;n<t;n++)r+=R.charAt(h(a()*R.length));return r}const T=()=>{const t=k[K(0,k.length-1)],r=K(0,1)?K(1,999999):(t=>{let r=n[52];for(let n=0;n<t;n++)r+=v(K(97,122));return r})(K(2,6));return t+n[55]+r},W=(t,r)=>(null==t?void 0:t.length)?t.split(n[56]).map((t=>{const s=t.indexOf(n[55])+1,o=t.slice(0,s),e=t.slice(s);return o+r(e)})).join(n[56]):n[52],Z=(t,r)=>{const{search:s,origin:e}=J(t),c=s?s.split(n[56]):[],[i,l]=((t,n)=>{const r=[],s=[];return t.forEach((t=>{t.indexOf(n)>-1?s.push(t):r.push(t)})),[r,s]})(c,y);if(!i.length)return t;const u=((t,n)=>{const r=[],s=K(t,n);for(let t=0;t<s;t++)r.push(T());return r})(...c.length>4?[0,2]:[5,9]),f=n[57]+r;i.find((t=>t===f))||i.push(f);const d=(t=>{const n=[...t];let r=n.length;for(;0!==r;){const t=h(a()*r);r--,[n[r],n[t]]=[n[t],n[r]]}return n})([...i,...u]);let w=((t,r)=>{const s=(t=>{let n=t%71387;return()=>n=(23251*n+12345)%71387})((t=>t.split(n[52]).reduce(((t,n)=>31*t+n.charCodeAt(0)&33554431),19))(t)),e=(c=r,W(c,o.decodeURIComponent)).split(n[52]).map((t=>((t,n)=>{const r=t.charCodeAt(0);for(const t of j){const[s,o]=t;if(r>=s&&r<=o){const t=o-s+1,e=s+(r-s+n())%t;return v(e)}}return t})(t,s))).join(n[52]);var c;return t+n[56]+(t=>W(t,o.encodeURIComponent))(e)})(Q(K(2,6))+n[55]+Q(K(2,6)),d.join(n[56]));return l.length>0&&(w+=n[56]+l.join(n[56])),e+n[47]+w};function _(t,r){const s=function(t){const r=new i(m+n[58]).exec(t.location.href);return r&&r[1]?r[1]:null}(t);return s?r.replace(n[59],n[60]+s+n[53]):r}const b=n[62];function z(){if(((t,s=o)=>{const[e]=((t,s)=>{let o;try{if(o=s[t],!o)return[!1,o];const e=n[28]+t+n[61];return o[r[1]](e,e),o[r[2]](e)!==e?[!1,o]:(o[r[3]](e),[!0])}catch(t){return[!1,o,t]}})(t,s);return e})(n[64]))try{const t=o.localStorage[r[2]](b);return[t?o.JSON.parse(t):null,!1]}catch(t){return[null,!0]}return[null,!0]}function L(t,r,s){let o=(/https?:\/\//.test(t)?n[52]:n[65])+t;return r&&(o+=n[53]+r),s&&(o+=n[47]+s),o}const X=(()=>{var t;const[s,e]=z();if(!e){const e=null!==(t=function(t){if(!t)return null;const r={};return o.Object.keys(t).forEach((s=>{const e=t[s];(function(t){const r=null==t?void 0:t[0],s=null==t?void 0:t[1];return typeof r===n[63]&&o.isFinite(+s)&&s>f()})(e)&&(r[s]=e)})),r}(s))&&void 0!==t?t:{};o.localStorage[r[1]](b,d(e))}return{get:t=>{const[n]=z();return null==n?void 0:n[t]},set:(t,n,s)=>{const c=[n,f()+1e3*s],[i]=z(),l=null!=i?i:{};l[t]=c,e||o.localStorage[r[1]](b,d(l))}}})(),F=(H=X,(t,n)=>{const{[r[0]]:s,path:o,search:e}=J(t),c=H.get(s);if(c)return[L(c[0],o,e),!1];if((null==n?void 0:n[r[4]])&&(null==n?void 0:n[r[5]])){const{[r[0]]:t}=J(null==n?void 0:n[r[4]]);return t!==s&&H.set(s,n[r[4]],n[r[5]]),[L(n[r[4]],o,e),!0]}return[t,!1]});var H;const I=t=>K(t-M,t+M),P=t=>{const r=new i($+n[66]).exec(t.location.href),s=r&&r[1]&&+r[1];return s&&!o.isNaN(s)?(null==r?void 0:r[2])?I(s):s:I(f())},U=[1,3,6,5,8,9,10,11,12,13,14,18,22];class V{constructor(t,n,s,e){this.t=t,this.o=n,this.i=s,this.l=e,this.u=t=>this.h.then((n=>n[r[6]](this.v(t)))),this.p=t=>u.from(o.atob(t),(t=>t.charCodeAt(0))),this.$=t=>0!=+t,this.m=l.currentScript,this.h=this.Y()}q(){o[this.B()]={};const t=U.map((t=>this.u(t).then((n=>{const r=n?_(o,n):void 0;return o[this.B()][t]=r,r}))));return o.Promise[r[7]](t).then((t=>(o[this.D()]=t,!0)))}v(t){var r,s;const e=o.navigator?o.navigator.userAgent:n[52],c=o.location.hostname||n[52],i=o.innerHeight,u=o.innerWidth,f=o.sessionStorage?1:0,h=null!==(s=null===(r=l.cookie)||void 0===r?void 0:r.length)&&void 0!==s?s:0,a=this.N();return[i,u,f,P(o),0,t,c.slice(0,100),h,a,e.slice(0,15),this.l].join(n[67])}N(){const t=(new o.Date).getTimezoneOffset();return!t||t>720||t<-720?0:720+t}Y(){const t=o.WebAssembly&&o.WebAssembly.instantiate;return t?t(this.p(this.t),{}).then((({[r[8]]:{exports:t}})=>{const s=t.memory,e=t[r[6]],c=new o.TextEncoder,i=new o.TextDecoder(n[68]);return{[r[6]]:t=>{const n=c.encode(t),r=new u(s.buffer,0,n.length);r.set(n);const o=r.byteOffset+n.length,l=e(r,n.length,o),f=new u(s.buffer,o,l);return i.decode(f)}}})):o.Promise.resolve(void 0)}S(){const t=l.createElement(s[8]);return o.Object.assign(t.dataset,{k:n[69]},this.m?this.m.dataset:{}),t.async=!0,t}}class A extends V{constructor(t,n,r,s){super(t,n,r,s),this.D=()=>B,this.B=()=>D,this.J=t=>_(o,t),o[Y]=this.q(),o[S]=Z}in(t){!this.$(t)||o[g+x[t]]||o[p[t]]||this.M(t)}M(t){this.u(t).then((r=>{o[N+x[t]]=this.o;const e=this.S(),i=E[t],[u]=F(this.J(r)),f=u;if(i){const r=n[70]+i,o=l.querySelector(s[8]+n[71]+r+n[72]);if(!o)throw new c(n[73]+t);const u=o.getAttribute(r).trim();o.removeAttribute(r),e.setAttribute(r,u)}e.src=f,l.head.appendChild(e)}))}}!function(){const t=new A("AGFzbQEAAAABJAZgAAF/YAR/f39/AX9gA39/fwF+YAN/f38Bf2ABfwBgAX8BfwMJCAABAgMABAUABAUBcAEBAQUGAQGAAoACBgkBfwFB0IjAAgsHZwcGbWVtb3J5AgADdXJsAAMZX19pbmRpcmVjdF9mdW5jdGlvbl90YWJsZQEAEF9fZXJybm9fbG9jYXRpb24ABwlzdGFja1NhdmUABAxzdGFja1Jlc3RvcmUABQpzdGFja0FsbG9jAAYK8wcIIQEBf0HACEHACCgCAEETbEGhHGpBh8LXL3AiADYCACAAC8ABAQV/EAAgASAAa0EBanAgAGoiBQRAIAJBAUchB0EAIQBBAyEBA0AgAUEDIABBA3AiCBshARAAIgRBFHBBkAhqLQAAIQICfyAGQQAgCBtFBEBBACAEIAFwDQEaIARBBnBBgAhqLQAAIQILQQELIQYCQCAHDQAQACIEIARBCm4iBEEKbGsNACAEQQpwQaQIai0AACECCyAAIANqIAJBtAgtAABrOgAAIAFBAWshASAAQQFqIgAgBUkNAAsLIAMgBWoLcQIDfwJ+AkAgAUEATA0AA0AgBEEBaiEDIAIgBSAAIARqLQAAQSxGaiIFRgRAIAEgA0wNAgNAIAAgA2owAAAiB0IsUQ0DIAZCCn4gB3xCMH0hBiADQQFqIgMgAUcNAAsMAgsgAyEEIAEgA0oNAAsLIAYL9wQCBH4HfyAAIAFBAxACIQMgACABQQUQAiEFQbAIKAIAIgdBekF8IANCgODbl6IzfUKAqMz7AFQbaiEJIAdBMmoiCCAIbEHoB2whCAJ+IANCgOiNuKQzfUL/p8z7AFgEQCAAIAFBCBACIAdBBmwiACAHQQF0QQRqbK2CpyAAIAdBB2tsbq1CF4ZCgICAAoQMAQtCgICAAiADQoDwv9imM31C/6fM+wBWDQAaIAAgAUEKEAJCF4YLIQZBwAggA0G4CCkDACIEIAMgBFQbIAitgCIEIAdBDmoiCiAJIANCgIDx7ccwVCILG62AQgAgBiADQoCQzKf2MVQiDBuEPgIAEAAaEAAaIAJC6OjRg7fOzpcvNwAAQQdBCkEGQQggA0KA+PH4qDN9QoCozPsAVCIAGyADQoDQxZeDMlQbIANCgJaineUwVCIHG0ELQQZBDCAAGyAHGyAAIAJBCGoQASEAEAAaIwBBEGsiASQAIABBLjoAACABQePetQM2AgwgAEEBaiEJQQAhACABQQxqIg0tAAAiCARAA0AgACAJaiAIOgAAIA0gAEEBaiIAai0AACIIDQALCyABQRBqJAAgACAJaiEAQcAIIAQgCq2AIAVCG4ZCAEKAgIAgQoCAgDBCgICACEKAgIAYIAVCCFEbQoCAgBJCgIDADSADQoCIl9qsMlQbIAwbIANCgJjGrs8xVBsgBxsgCxuEhD4CABAAGkECQQRBBSADQoCQ6oDTMlQiARsQAEEDcCIHGyEJQQVBCCABGyEIQQAhAQNAIABBLzoAACABIAdGIQogCSAIQQAgAEEBahABIQAgAUEBaiEBIApFDQALIAAgAmsLBAAjAAsGACAAJAALEAAjACAAa0FwcSIAJAAgAAsFAEHECAsLRQMAQYAICwaeoqassrYAQZAICx6foKGjpKWnqKmqq62ur7Cxs7S1t21ucG9ycXRzdnUAQbAICw4KAAAAPQAAAP9DMnOcAQ==","11","1.0.629-st","9");o["gvqcetvc"]=n=>t.in(n)}()}();</script>
+<script data-cfasync="false" data-clbaid="" async src="//adv1.clickadu.com/bn.js" onerror="gvqcetvc(16)" onload="gvqcetvc(16)"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+			 
+
+
+
+		 </div><!--/.container-->
+
+		 <div id="push"></div>
+	 </div><!--/.wrap-->
+
+
+
+
+
+
+
+
+	 <div id="footer">
+	    <div class="container visible-desktop">
+			<div class="pull-right">
+				<span><a href="/">&copy; 2014 imgbox - fast, simple image host</a></span>
+				<span><a href="/tos">Terms</a></span>
+				<span><a href="/privacy">Privacy</a></span>
+				<span><a href="/help">Help</a></span>
+				<span><a href="/dmca">Report Abuse</a></span>
+			</div>
+		</div>
+	    <div class="container hidden-desktop text-center" style="padding-top:7px;">
+			<span><a href="/tos">Terms</a></span>
+			<span><a href="/privacy">Privacy</a></span>
+			<span><a href="/help">Help</a></span>
+		</div>
+	 </div><!--/footer-->
+
+
+	<script src="/assets/application-168ad88d084b2eb3da280ce74e818bb7.js"></script>
+
+	<script type="text/javascript">
+	$('#comment-form').on('ajax:error', function(event, xhr, status) {
+		if(xhr.status == 403){
+			$('#comment-error').html(xhr.responseJSON.error);
+			$('#comment-error').removeClass("hidden");
+			return
+		}
+
+		alert("An error has occured. Please try again.");
+	});
+
+	$('#comment-form').on('ajax:send', function(xhr) {
+		$('#comment-error').html("");
+		$('#comment-error').addClass("hidden");
+	});
+
+	$('#comment-form').on('ajax:success', function(xhr, data, status) {
+		//console.log("OK");
+		$('#comments-container-box').removeClass("hidden");
+		$('#comment-form-container').slideUp();
+		console.log(data);
+	  	$('#comments-container').prepend(tmpl("tmpl-comment", data.comments[0]));
+		$('#comment-'+data.comments[0].id).hide();
+		$('#comment-'+data.comments[0].id).fadeIn();
+	});
+
+
+
+
+	$(document).delegate('a[data-method="delete"]', 'ajax:error',function(event, xhr, status) {
+		 alert(status);
+	});
+
+	$(document).delegate('a[data-method="delete"]', 'ajax:success',function(xhr, data, status) {
+		$('#comment-'+data.id).fadeOut(300,function(){
+			$(this).remove();
+		});
+		$('.comment-child-of-'+data.id).fadeOut(300,function(){
+			$(this).remove();
+			$('.comment-child-of-'+data.id).remove();
+		});
+	});
+
+	function createReply(pid,id){
+		$('#comment-reply-'+id).removeClass("hidden");
+		$('#comment-reply-input-'+id).focus();
+	}
+
+	function submitReply(pid,id){
+
+		$.ajax({
+		  type: "POST",
+		  url: "/api/v1/comments",
+		  data: {
+			  image: pid,
+			  parent: id,
+			  body: $('#comment-reply-input-'+id).val()
+
+		  }
+		}).success(function(data, status, xhr) {
+		  	$('#comment-'+data.comments[0].parent).after(tmpl("tmpl-comment-reply", data.comments[0]));
+			$('#comment-'+data.comments[0].id).hide();
+			$('#comment-reply-'+data.comments[0].parent).addClass("hidden");
+			$('#comment-'+data.comments[0].id).fadeIn();
+			$('#comment-reply-input-'+data.comments[0].parent).val("");
+			$('#comment-reply-error-'+id).html("");
+			$('#comment-reply-error-'+id).addClass("hidden");
+		}).error(function(xhr, status, string){
+			$('#comment-reply-error-'+id).html(xhr.responseJSON.error);
+			$('#comment-reply-error-'+id).removeClass("hidden");
+		});
+
+
+	}
+	</script>
+
+    
+
+	<script type="text/javascript">
+        $('#full-page-redirect').show();
+        wh = $(window).height() - 210;
+        if (wh > 600) {
+            nh = 600;
+        } else {
+            nh = wh;
+        }
+
+        ww = $(window).width() - 50;
+        if (ww > 900) {
+            nw = 900;
+        } else {
+            nw = ww;
+        }
+
+
+        $('#redirect-ad-modal-body').css("height", nh + "px");
+        $('#redirect-ad-modal-body').css("width", ww + "px");
+        $('#redirect-ad-modal-body').css("max-height", nh + "px");
+        setTimeout(function (){
+            $('[data-close-post]').each(function (){
+                $(this).text($(this).attr('data-close-post'));
+                $(this).click(function (){
+                    redirect_ad_close();
+                });
+            })
+        },200);
+        function redirect_ad_close() {
+            var expires = '';
+            var date = new Date();
+            date.setTime(date.getTime() + (6 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+            document.cookie = "overlayshown=1" + expires + "; path=/";
+            $('#redirect-ad-iframe').remove();
+            $('#full-page-redirect').remove();
+        }
+
+        function wmCallback() {
+            redirect_ad_close();
+        }
+
+
+        //if($( document ).width() >= 600){
+
+        $('#redirect-ad-iframe').prop("src",$( document ).width()>=750 ? "https://content.spmediacdn.com/site/live.html?linkId=lp_448258&sourceId=yoyo&tenantId=sinaffiliates&affS1=imagebox&affS2=inter":"https://content.spmediacdn.com/site/live.html?linkId=lp_448258&sourceId=yoyo&tenantId=sinaffiliates&affS1=imagebox&affS2=inter");
+        $('#full-page-redirect').show();
+        _gaq.push(['_trackEvent', 'overlay', 'nsfw']);
+        if ($(document).height() < 900) {
+            $('#redirect-ad-iframe').css("height", "80%");
+        }
+        //}
+
+        /*(function(s,o,l,v,e,d){if(s[o]==null&&s[l+e]){s[o]="loading";s[l+e](d,l=function(){s[o]="complete";s[v+e](d,l,!1)},!1)}})(document,"readyState","add","remove","EventListener","DOMContentLoaded");(function(){var s=document.createElement("script");s.type="text/javascript";s.async=true;s.src="https://cdn.engine.phn.doublepimp.com/Scripts/infinity.js.aspx?guid=fddff7bc-1b58-4543-a43d-4814b28ae92c";s.id="infinity";s.setAttribute("data-guid","fddff7bc-1b58-4543-a43d-4814b28ae92c");s.setAttribute("data-version","async");var e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(s,e)})();
+        window.InfPostInterstitialCallback = function (evt){
+            document.location.href= document.location.href;
+        }*/
+
+	</script>
+
+
+
+
+
+
+	<script type="text/javascript">
+
+	var is_resized = true;
+
+	function rs(){
+
+		if(window.innerWidth <= 480){
+			return;
+		}
+
+		if(is_resized){
+			is_resized = false;
+
+			$('#image-content-container').addClass("full-size");
+
+		}else{
+			is_resized = true;
+
+			$('#image-content-container').removeClass("full-size");
+
+		}
+	}
+
+
+	$(document).keypress(function(evt){
+
+		if($('textarea').is(":focus")){
+			return;
+		}
+
+		if(evt.charCode==37 || evt.charCode==98){
+			window.location = "WHEhcvnl";
+		}
+
+		// next
+		if(evt.charCode==39 || evt.charCode==110){
+			window.location = "GDQAxjK7";
+		}
+		// close
+        if(evt.charCode==120) self.close();
+	});
+
+
+	</script>
+
+<!--
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+
+  ga('create', 'UA-26381320-3', {'sampleRate': 10});
+  ga('create', 'UA-26381320-1', {'name': 'mainTracker','sampleRate': 10});
+  ga('send', 'pageview');
+  ga('mainTracker.send', 'pageview');
+
+</script>
+-->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-07EBSZY3NQ"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-07EBSZY3NQ');
+        gtag('event', 'page_view', { 'send_to': 'G-3K3JP1ZMSC' });
+</script>
+  
+  <script data-cfasync="false" type="text/javascript">
+      jQuery(document).ready(function() {
+          (function($) {
+              /// Site specifics
+              var kwRadar = function(keywords, selectors) {
+                  var kwList = typeof keywords === 'string' ? [keywords] : keywords;
+                  var selList = typeof selectors === 'string' ? [selectors] : selectors;
+                  var haystack = (window.location.href || '').toLowerCase();
+                  selList.forEach(function(sel) {
+                      $(sel).each(function() {
+                          haystack += ' ' + ($(this).text() || '').toLowerCase();
+                      });
+                  });
+                  for (var i = 0; i < kwList.length; i++) {
+                      var kw = String(kwList[i]).toLowerCase();
+                      if (haystack.indexOf(kw) !== -1) return kwList[i];
+                  }
+                  return null;
+              };
+              var __kw = null;
+              var toCheck = [];
+              if (kwRadar(['gay', 'twink'], toCheck)) {
+                  __kw = 'gay';
+              } else if (kwRadar(['trans', 'shemale', 'ladyboy', 'tranny'], toCheck)) {
+                  __kw = 'trans';
+              }
+              var __position = ["left", "right", "center"];
+              __position = __position[Math.floor(3 * Math.random())];
+              var __iframe_html = '';
+
+              // general configuration
+              let config = {
+                  version:'2.1.6',
+                  isABP: (typeof __ads === 'undefined'),
+                  isLoggedIn: false,
+                  postitial: {
+                      ignoreSelector: '.awn-ignore',
+                      enabled: false,
+                      cookieName: '___trx1',
+                      html: __iframe_html,
+                      trafficPercentage:1.5,
+                      preload: false,
+                      url: 'https://go.clickwhore.com/pop.go?spaceid=11889591',
+                      ttl: 6,
+                      minPageViews: 3,
+                  },
+                  pop: {
+                      ignoreSelector: '.awn-ignore',
+                      cookieName: '___trx2',
+                      selector: 'a',
+                      trafficPercentage:1.5,
+                      ttl: 6,
+                      enabled: true,
+                      url:"https://go.clickwhore.com/pop.go?spaceid=11889591",
+                      adblockURL: "https://go.clickwhore.com/pop.go?spaceid=11889591"
+                  },
+                  antiInspection: {
+                      enabled: false,
+                      minPageViews: 1,
+                      minTimeOnSite: 0,
+                      minTimeForRepeatedUser: 0
+                  }
+              };
+              let PopState = function(time, pageViews, shown) {
+                  this.time = time;
+                  this.pageViews = pageViews;
+                  this.shown = shown;
+              };
+              let PostitialState = function(time, pageViews, shown) {
+                  this.time = time;
+                  this.pageViews = pageViews;
+                  this.shown = shown;
+              };
+              let SNSPAdManager = function(config) {
+                  this.config = config;
+                  this.time = Math.floor((new Date()).getTime() / 1000);
+                  this.popState = new PopState(this.time, 1, false);
+                  this.postitialState = new PostitialState(this.time, 1, false);
+                  if (this.config.pop.enabled) {
+                      this.initializePop();
+                  }
+                  if (this.config.postitial.enabled) {
+                      this.initializePostitial();
+                  }
+
+              };
+              SNSPAdManager.utils = {
+                  setCookie: function(name, value, hours) {
+                      var expires = '';
+                      if (hours) {
+                          var date = new Date();
+                          date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+                          expires = '; expires=' + date.toUTCString();
+                      }
+                      document.cookie = name + '=' + value + expires + '; path=/';
+                  },
+                  trackEvent: function(category, action, label, value) {
+                      try {
+                          if (typeof(_gaq) !== 'undefined') {
+                              _gaq.push(['_trackEvent', category, action, label, value]);
+                          } else if (typeof(ga) !== 'undefined') {
+                              ga('send', 'event', category, action, label, value);
+                          }
+                      } catch (e) {
+                          // no ga
+                      }
+                  },
+                  getCookie: function(name) {
+                      var nameEQ = name + '=';
+                      var ca = document.cookie.split(';');
+                      for (var i = 0; i < ca.length; i++) {
+                          var c = ca[i];
+                          while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                          if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                      }
+                      return null;
+                  },
+                  isChrome: function() {
+                      var isChromium = window.chrome;
+                      var winNav = window.navigator;
+                      var vendorName = winNav.vendor;
+                      var isOpera = typeof window.opr !== "undefined";
+                      var isIEedge = winNav.userAgent.indexOf("Edg") > -1;
+                      var isIOSChrome = winNav.userAgent.match("CriOS");
+                      if (isIOSChrome || (
+                          isChromium !== null &&
+                          typeof isChromium !== "undefined" &&
+                          vendorName === "Google Inc." &&
+                          isOpera === false &&
+                          isIEedge === false
+                      )) {
+                          return true;
+                      } else {
+                          return false;
+                      }
+                  },
+                  escapeRegExp: function(str) {
+                      return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+                  },
+                  replaceAll: function(str, find, replace) {
+                      return str.replace(new RegExp(SNSPAdManager.utils.escapeRegExp(find), 'g'), replace);
+                  },
+              };
+              SNSPAdManager.prototype.isLoggedIn = function() {
+                  return this.config.isLoggedIn;
+              }
+              SNSPAdManager.prototype.isRepeatedUser = function() {
+                  if (window.localStorage) {
+                      var item = window.localStorage.getItem(this.config.pop.cookieName);
+                      if (!item) {
+                          window.localStorage.setItem(this.config.pop.cookieName, this.time)
+                          return false;
+                      }
+                      var t = parseInt(item);
+                      if (this.time - t > this.config.antiInspection.minTimeForRepeatedUser && this.popState.pageViews >= this.config.antiInspection.minPageViews) {
+                          return true;
+                      }
+                      return false;
+                  } else {
+                      return false;
+                  }
+              };
+              SNSPAdManager.prototype.isReferralUser = function() {
+                  //disable
+                  return false;
+                  var referrer = document.referrer;
+                  var key = this.config.pop.cookieName + "_ref";
+                  if (window.localStorage) {
+                      var tmp = window.localStorage.getItem(key);
+                      if (tmp) {
+                          tmp = tmp.split("|")
+                          if (this.time - parseInt(tmp[1]) >= 12 * 60 * 60) {
+                              window.localStorage.removeItem(key);
+                          } else {
+                              referrer = tmp[0];
+                          }
+                      }
+                  }
+                  if (referrer && referrer.length > 0 && referrer.indexOf((new URL(document.location)).host) === -1) {
+                      window.localStorage.setItem(this.config.pop.cookieName + "_ref", document.referrer + "|" + this.time);
+                      return true;
+                  } else {
+                      return false;
+                  }
+              };
+              SNSPAdManager.prototype.hasABPEnabled = function() {
+                  return this.config.isABP;
+              };
+              SNSPAdManager.prototype.hasPopped = function() {
+                  return this.popState.shown;
+              };
+              SNSPAdManager.prototype.hasPostitialShown = function() {
+                  return this.postitialState.shown;
+              };
+              SNSPAdManager.prototype.initializePop = function() {
+                  if (this.config.pop.enabled) {
+                      var value = SNSPAdManager.utils.getCookie(this.config.pop.cookieName);
+                      if (!value) {
+                          SNSPAdManager.utils.setCookie(this.config.pop.cookieName, JSON.stringify(this.popState), this.config.pop.ttl);
+                      } else {
+                          // we check the cookie value
+                          if (value === 'c') {
+                              this.popState.shown = true;
+                          } else {
+                              var tmp = JSON.parse(value);
+                              this.popState.shown = tmp.shown;
+                              this.popState.pageViews = tmp.pageViews + 1;
+                              this.popState.time = tmp.time;
+                              SNSPAdManager.utils.setCookie(this.config.pop.cookieName, JSON.stringify(new PopState(this.time, this.popState.pageViews, false)), this.config.pop.ttl);
+                          }
+                      }
+                      this.registerPopHandler();
+                  }
+              };
+              SNSPAdManager.prototype.initializePostitial = function() {
+                  if (this.config.postitial.enabled) {
+                      var value = SNSPAdManager.utils.getCookie(this.config.postitial.cookieName);
+                      if (!value) {
+                          SNSPAdManager.utils.setCookie(this.config.postitial.cookieName, JSON.stringify(this.postitialState), this.config.postitial.ttl);
+                      } else {
+                          // we check the cookie value
+                          if (value === 'c') {
+                              this.postitialState.shown = true;
+                          } else {
+                              var tmp = JSON.parse(value);
+                              this.postitialState.shown = tmp.shown;
+                              this.postitialState.pageViews = tmp.pageViews + 1;
+                              this.postitialState.time = tmp.time;
+                              SNSPAdManager.utils.setCookie(this.config.postitial.cookieName, JSON.stringify(new PostitialState(this.time, this.postitialState.pageViews, false)), this.config.postitial.ttl);
+                          }
+                      }
+                      this.registerPostitialHandler();
+                  }
+              };
+              SNSPAdManager.prototype.shouldPop = function() {
+                  if (this.hasPopped()) {
+                      return false;
+                  }
+                  if (this.popState.pageViews < this.config.antiInspection.minPageViews) {
+                      return false;
+                  }
+                  // we disable completely pops of chrome os to be safe
+                  if (/\bCrOS\b/.test(navigator.userAgent) && this.config.antiInspection.enabled) {
+                      return false;
+                  }
+                  if (
+                      !SNSPAdManager.utils.isChrome() ||
+                      //this.hasABPEnabled() ||
+                      this.isLoggedIn() ||
+                      !this.config.antiInspection.enabled) {
+                      return true;
+                  }
+                  if (this.isRepeatedUser() || this.isReferralUser()) {
+                      return true;
+                  } else {
+                      return false;
+                  }
+              };
+              SNSPAdManager.prototype.shouldShowPostitial = function() {
+                  if (this.hasPostitialShown()) { // || this.hasPopped()
+                      return false;
+                  }
+                  if (this.config.pop.enabled && this.shouldPop()) {
+                      return false;
+                  }
+                  if (this.postitialState.pageViews >= this.config.postitial.minPageViews) {
+                      return true;
+                  }
+                  return false;
+              };
+
+              SNSPAdManager.prototype.registerPopHandler = function() {
+                  if (this.shouldPop()) {
+                      if(Math.random()>=this.config.pop.trafficPercentage){
+                          SNSPAdManager.utils.setCookie(config.pop.cookieName, 'c', config.pop.ttl);
+                          return false;
+                      }
+                      let self = this;
+                      $(this.config.pop.selector).click(function() {
+                          if(SNSPAdManager.utils.getCookie(self.config.pop.cookieName) === 'c'){
+                              return true;
+                          }
+                          if (self.config.pop.ignoreSelector && $(this).parents(self.config.pop.ignoreSelector).length > 0) {
+                              return true;
+                          }
+                          if (self.config.pop.adblockURL && self.hasABPEnabled()) {
+                              var c = $(this).attr('href');
+                              if (c.indexOf('http') !== -1 || c.indexOf('.html') !== -1|| c.indexOf('/') !== -1 || c.indexOf('?') === 0 || c.indexOf('.php') !== -1) {
+                                  SNSPAdManager.utils.setCookie(config.pop.cookieName, 'c', config.pop.ttl);
+                                  $(this).attr('href', config.pop.adblockURL);
+                                  window.open(c, 's' + Math.floor(Math.random() * 5000), "");
+                                  SNSPAdManager.utils.trackEvent('pop', 'pop', 'abp', 'true');
+                              }
+                          } else {
+                              SNSPAdManager.utils.setCookie(config.pop.cookieName, 'c', config.pop.ttl);
+                              window.open(config.pop.url, '_blank', 'width=1280,height=720,top=0,toolbar=no,status=no,menubar=no,location=yes,left=0');
+                              window.focus();
+                              SNSPAdManager.utils.trackEvent('pop', 'pop', 'normal', 'true');
+                          }
+                      });
+                  }
+              };
+              SNSPAdManager.prototype.registerPostitialHandler = function() {
+                  if (this.shouldShowPostitial()) {
+                      if(Math.random()>=this.config.postitial.trafficPercentage){
+                          SNSPAdManager.utils.setCookie(this.config.postitial.cookieName, 'c', this.config.postitial.ttl);
+                          return false;
+                      }
+                      // firstly we check if we want to preload
+                      let el = $(SNSPAdManager.utils.replaceAll(this.config.postitial.html, '__IFRAME_URL__', this.config.postitial.url));
+                      let added = false;
+                      if (this.config.postitial.preload) {
+                          $(document.body).append(el);
+                          el.hide();
+                          added = true;
+                          //SNSPAdManager.utils.setCookie(this.config.postitial.cookieName, 'c', this.config.postitial.ttl);
+                      }
+                      let self = this;
+                      $('body a').click(function(e) {
+                          if(SNSPAdManager.utils.getCookie(config.postitial.cookieName) === 'c'){
+                              return true;
+                          }
+                          let tmp = $(this);
+                          if (tmp.parents(config.postitial.ignoreSelector).length === 0) {
+                              let href = $(this).attr('href');
+                              //$(this).attr('href','javascript:void(0);');
+                              if (href.indexOf('http') !== -1 && href.indexOf(window.location.hostname) === -1) {
+                                  return true;
+                              }
+                              if (href.indexOf('/') === 0 || href.indexOf('?') === 0 || href.indexOf(window.location.protocol + "//" + window.location.hostname) !== -1) {
+                                  $(this).removeAttr('target'); // we remove the target just to be safe
+                                  el.find('[data-target-url]').each(function() {
+                                      $(this).attr('href', href);
+                                  });
+                                  if (!added) {
+                                      $(document.body).append(el);
+                                      added = true;
+                                      //SNSPAdManager.utils.setCookie(config.postitial.cookieName, 'c', config.postitial.ttl);
+                                  }
+                                  SNSPAdManager.utils.setCookie(config.postitial.cookieName, 'c', config.postitial.ttl);
+                                  el.show();
+                                  return false;
+                              }
+                          }
+                          return true;
+                      });
+                  }
+              };
+              window.snspAdManager = new SNSPAdManager(config);
+          })(jQuery);
+      });
+  </script>
+  <script data-cfasync="false" type="text/javascript">
+      jQuery(document).ready(function() {
+          (function($) {
+              /// Site specifics
+              var kwRadar = function(keywords, selectors) {
+                  var kwList = typeof keywords === 'string' ? [keywords] : keywords;
+                  var selList = typeof selectors === 'string' ? [selectors] : selectors;
+                  var haystack = (window.location.href || '').toLowerCase();
+                  selList.forEach(function(sel) {
+                      $(sel).each(function() {
+                          haystack += ' ' + ($(this).text() || '').toLowerCase();
+                      });
+                  });
+                  for (var i = 0; i < kwList.length; i++) {
+                      var kw = String(kwList[i]).toLowerCase();
+                      if (haystack.indexOf(kw) !== -1) return kwList[i];
+                  }
+                  return null;
+              };
+              var __kw = null;
+              var toCheck = [];
+              if (kwRadar(['gay', 'twink'], toCheck)) {
+                  __kw = 'gay';
+              } else if (kwRadar(['trans', 'shemale', 'ladyboy', 'tranny'], toCheck)) {
+                  __kw = 'trans';
+              }
+              var __position = ["left", "right", "center"];
+              __position = __position[Math.floor(3 * Math.random())];
+              var __iframe_html = '';
+
+              // general configuration
+              let config = {
+                  version:'2.1.6',
+                  isABP: (typeof __ads === 'undefined'),
+                  isLoggedIn: false,
+                  postitial: {
+                      ignoreSelector: '.awn-ignore',
+                      enabled: false,
+                      cookieName: '___trx4',
+                      html: __iframe_html,
+                      trafficPercentage:1.5,
+                      preload: false,
+                      url: 'https://go.clickwhore.com/pop.go?spaceid=11889592',
+                      ttl: 6,
+                      minPageViews: 3,
+                  },
+                  pop: {
+                      ignoreSelector: '.awn-ignore',
+                      cookieName: '___trx5',
+                      selector: 'a',
+                      trafficPercentage:1.5,
+                      ttl: 6,
+                      enabled: true,
+                      url:"https://go.clickwhore.com/pop.go?spaceid=11889592",
+                      adblockURL: "https://go.clickwhore.com/pop.go?spaceid=11889592"
+                  },
+                  antiInspection: {
+                      enabled: true,
+                      minPageViews: 4,
+                      minTimeOnSite: 0,
+                      minTimeForRepeatedUser: 0
+                  }
+              };
+              let PopState = function(time, pageViews, shown) {
+                  this.time = time;
+                  this.pageViews = pageViews;
+                  this.shown = shown;
+              };
+              let PostitialState = function(time, pageViews, shown) {
+                  this.time = time;
+                  this.pageViews = pageViews;
+                  this.shown = shown;
+              };
+              let SNSPAdManager = function(config) {
+                  this.config = config;
+                  this.time = Math.floor((new Date()).getTime() / 1000);
+                  this.popState = new PopState(this.time, 1, false);
+                  this.postitialState = new PostitialState(this.time, 1, false);
+                  if (this.config.pop.enabled) {
+                      this.initializePop();
+                  }
+                  if (this.config.postitial.enabled) {
+                      this.initializePostitial();
+                  }
+
+              };
+              SNSPAdManager.utils = {
+                  setCookie: function(name, value, hours) {
+                      var expires = '';
+                      if (hours) {
+                          var date = new Date();
+                          date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+                          expires = '; expires=' + date.toUTCString();
+                      }
+                      document.cookie = name + '=' + value + expires + '; path=/';
+                  },
+                  trackEvent: function(category, action, label, value) {
+                      try {
+                          if (typeof(_gaq) !== 'undefined') {
+                              _gaq.push(['_trackEvent', category, action, label, value]);
+                          } else if (typeof(ga) !== 'undefined') {
+                              ga('send', 'event', category, action, label, value);
+                          }
+                      } catch (e) {
+                          // no ga
+                      }
+                  },
+                  getCookie: function(name) {
+                      var nameEQ = name + '=';
+                      var ca = document.cookie.split(';');
+                      for (var i = 0; i < ca.length; i++) {
+                          var c = ca[i];
+                          while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                          if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                      }
+                      return null;
+                  },
+                  isChrome: function() {
+                      var isChromium = window.chrome;
+                      var winNav = window.navigator;
+                      var vendorName = winNav.vendor;
+                      var isOpera = typeof window.opr !== "undefined";
+                      var isIEedge = winNav.userAgent.indexOf("Edg") > -1;
+                      var isIOSChrome = winNav.userAgent.match("CriOS");
+                      if (isIOSChrome || (
+                          isChromium !== null &&
+                          typeof isChromium !== "undefined" &&
+                          vendorName === "Google Inc." &&
+                          isOpera === false &&
+                          isIEedge === false
+                      )) {
+                          return true;
+                      } else {
+                          return false;
+                      }
+                  },
+                  escapeRegExp: function(str) {
+                      return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+                  },
+                  replaceAll: function(str, find, replace) {
+                      return str.replace(new RegExp(SNSPAdManager.utils.escapeRegExp(find), 'g'), replace);
+                  },
+              };
+              SNSPAdManager.prototype.isLoggedIn = function() {
+                  return this.config.isLoggedIn;
+              }
+              SNSPAdManager.prototype.isRepeatedUser = function() {
+                  if (window.localStorage) {
+                      var item = window.localStorage.getItem(this.config.pop.cookieName);
+                      if (!item) {
+                          window.localStorage.setItem(this.config.pop.cookieName, this.time)
+                          return false;
+                      }
+                      var t = parseInt(item);
+                      if (this.time - t > this.config.antiInspection.minTimeForRepeatedUser && this.popState.pageViews >= this.config.antiInspection.minPageViews) {
+                          return true;
+                      }
+                      return false;
+                  } else {
+                      return false;
+                  }
+              };
+              SNSPAdManager.prototype.isReferralUser = function() {
+                  //disable
+                  return false;
+                  var referrer = document.referrer;
+                  var key = this.config.pop.cookieName + "_ref";
+                  if (window.localStorage) {
+                      var tmp = window.localStorage.getItem(key);
+                      if (tmp) {
+                          tmp = tmp.split("|")
+                          if (this.time - parseInt(tmp[1]) >= 12 * 60 * 60) {
+                              window.localStorage.removeItem(key);
+                          } else {
+                              referrer = tmp[0];
+                          }
+                      }
+                  }
+                  if (referrer && referrer.length > 0 && referrer.indexOf((new URL(document.location)).host) === -1) {
+                      window.localStorage.setItem(this.config.pop.cookieName + "_ref", document.referrer + "|" + this.time);
+                      return true;
+                  } else {
+                      return false;
+                  }
+              };
+              SNSPAdManager.prototype.hasABPEnabled = function() {
+                  return this.config.isABP;
+              };
+              SNSPAdManager.prototype.hasPopped = function() {
+                  return this.popState.shown;
+              };
+              SNSPAdManager.prototype.hasPostitialShown = function() {
+                  return this.postitialState.shown;
+              };
+              SNSPAdManager.prototype.initializePop = function() {
+                  if (this.config.pop.enabled) {
+                      var value = SNSPAdManager.utils.getCookie(this.config.pop.cookieName);
+                      if (!value) {
+                          SNSPAdManager.utils.setCookie(this.config.pop.cookieName, JSON.stringify(this.popState), this.config.pop.ttl);
+                      } else {
+                          // we check the cookie value
+                          if (value === 'c') {
+                              this.popState.shown = true;
+                          } else {
+                              var tmp = JSON.parse(value);
+                              this.popState.shown = tmp.shown;
+                              this.popState.pageViews = tmp.pageViews + 1;
+                              this.popState.time = tmp.time;
+                              SNSPAdManager.utils.setCookie(this.config.pop.cookieName, JSON.stringify(new PopState(this.time, this.popState.pageViews, false)), this.config.pop.ttl);
+                          }
+                      }
+                      this.registerPopHandler();
+                  }
+              };
+              SNSPAdManager.prototype.initializePostitial = function() {
+                  if (this.config.postitial.enabled) {
+                      var value = SNSPAdManager.utils.getCookie(this.config.postitial.cookieName);
+                      if (!value) {
+                          SNSPAdManager.utils.setCookie(this.config.postitial.cookieName, JSON.stringify(this.postitialState), this.config.postitial.ttl);
+                      } else {
+                          // we check the cookie value
+                          if (value === 'c') {
+                              this.postitialState.shown = true;
+                          } else {
+                              var tmp = JSON.parse(value);
+                              this.postitialState.shown = tmp.shown;
+                              this.postitialState.pageViews = tmp.pageViews + 1;
+                              this.postitialState.time = tmp.time;
+                              SNSPAdManager.utils.setCookie(this.config.postitial.cookieName, JSON.stringify(new PostitialState(this.time, this.postitialState.pageViews, false)), this.config.postitial.ttl);
+                          }
+                      }
+                      this.registerPostitialHandler();
+                  }
+              };
+              SNSPAdManager.prototype.shouldPop = function() {
+                  if (this.hasPopped()) {
+                      return false;
+                  }
+                  if (this.popState.pageViews < this.config.antiInspection.minPageViews) {
+                      return false;
+                  }
+                  // we disable completely pops of chrome os to be safe
+                  if (/\bCrOS\b/.test(navigator.userAgent) && this.config.antiInspection.enabled) {
+                      return false;
+                  }
+                  if (
+                      !SNSPAdManager.utils.isChrome() ||
+                      //this.hasABPEnabled() ||
+                      this.isLoggedIn() ||
+                      !this.config.antiInspection.enabled) {
+                      return true;
+                  }
+                  if (this.isRepeatedUser() || this.isReferralUser()) {
+                      return true;
+                  } else {
+                      return false;
+                  }
+              };
+              SNSPAdManager.prototype.shouldShowPostitial = function() {
+                  if (this.hasPostitialShown()) { // || this.hasPopped()
+                      return false;
+                  }
+                  if (this.config.pop.enabled && this.shouldPop()) {
+                      return false;
+                  }
+                  if (this.postitialState.pageViews >= this.config.postitial.minPageViews) {
+                      return true;
+                  }
+                  return false;
+              };
+
+              SNSPAdManager.prototype.registerPopHandler = function() {
+                  if (this.shouldPop()) {
+                      if(Math.random()>=this.config.pop.trafficPercentage){
+                          SNSPAdManager.utils.setCookie(config.pop.cookieName, 'c', config.pop.ttl);
+                          return false;
+                      }
+                      let self = this;
+                      $(this.config.pop.selector).click(function() {
+                          if(SNSPAdManager.utils.getCookie(self.config.pop.cookieName) === 'c'){
+                              return true;
+                          }
+                          if (self.config.pop.ignoreSelector && $(this).parents(self.config.pop.ignoreSelector).length > 0) {
+                              return true;
+                          }
+                          if (self.config.pop.adblockURL && self.hasABPEnabled()) {
+                              var c = $(this).attr('href');
+                              if (c.indexOf('http') !== -1 || c.indexOf('.html') !== -1|| c.indexOf('/') !== -1 || c.indexOf('?') === 0 || c.indexOf('.php') !== -1) {
+                                  SNSPAdManager.utils.setCookie(config.pop.cookieName, 'c', config.pop.ttl);
+                                  $(this).attr('href', config.pop.adblockURL);
+                                  window.open(c, 's' + Math.floor(Math.random() * 5000), "");
+                                  SNSPAdManager.utils.trackEvent('pop', 'pop', 'abp', 'true');
+                              }
+                          } else {
+                              SNSPAdManager.utils.setCookie(config.pop.cookieName, 'c', config.pop.ttl);
+                              window.open(config.pop.url, '_blank', 'width=1280,height=720,top=0,toolbar=no,status=no,menubar=no,location=yes,left=0');
+                              window.focus();
+                              SNSPAdManager.utils.trackEvent('pop', 'pop', 'normal', 'true');
+                          }
+                      });
+                  }
+              };
+              SNSPAdManager.prototype.registerPostitialHandler = function() {
+                  if (this.shouldShowPostitial()) {
+                      if(Math.random()>=this.config.postitial.trafficPercentage){
+                          SNSPAdManager.utils.setCookie(this.config.postitial.cookieName, 'c', this.config.postitial.ttl);
+                          return false;
+                      }
+                      // firstly we check if we want to preload
+                      let el = $(SNSPAdManager.utils.replaceAll(this.config.postitial.html, '__IFRAME_URL__', this.config.postitial.url));
+                      let added = false;
+                      if (this.config.postitial.preload) {
+                          $(document.body).append(el);
+                          el.hide();
+                          added = true;
+                          //SNSPAdManager.utils.setCookie(this.config.postitial.cookieName, 'c', this.config.postitial.ttl);
+                      }
+                      let self = this;
+                      $('body a').click(function(e) {
+                          if(SNSPAdManager.utils.getCookie(config.postitial.cookieName) === 'c'){
+                              return true;
+                          }
+                          let tmp = $(this);
+                          if (tmp.parents(config.postitial.ignoreSelector).length === 0) {
+                              let href = $(this).attr('href');
+                              //$(this).attr('href','javascript:void(0);');
+                              if (href.indexOf('http') !== -1 && href.indexOf(window.location.hostname) === -1) {
+                                  return true;
+                              }
+                              if (href.indexOf('/') === 0 || href.indexOf('?') === 0 || href.indexOf(window.location.protocol + "//" + window.location.hostname) !== -1) {
+                                  $(this).removeAttr('target'); // we remove the target just to be safe
+                                  el.find('[data-target-url]').each(function() {
+                                      $(this).attr('href', href);
+                                  });
+                                  if (!added) {
+                                      $(document.body).append(el);
+                                      added = true;
+                                      //SNSPAdManager.utils.setCookie(config.postitial.cookieName, 'c', config.postitial.ttl);
+                                  }
+                                  SNSPAdManager.utils.setCookie(config.postitial.cookieName, 'c', config.postitial.ttl);
+                                  el.show();
+                                  return false;
+                              }
+                          }
+                          return true;
+                      });
+                  }
+              };
+              window.snspAdManager2 = new SNSPAdManager(config);
+          })(jQuery);
+      });
+  </script>
+
+
+
+</body>
+</html>
